@@ -10,7 +10,8 @@ void caesarEncrypt(); //function to encrypt in Caesar cipher
 void caesarDecrypt(); //function to decrypt in Caesar cipher
 void scytaleEncrypt(); //function to encrypt in Scytale cipher
 void scytaleDecrypt(); //function to decrypt in scytale cipher
-
+void atbashEncrypt(); //function to encrypt in Atbash cipher
+void atbashDecrypt(); //function to decrypt in Atbash cipher
 
 int main(void) {
 	printMenu();
@@ -38,13 +39,20 @@ void encryptMenu() {
 	puts("\nList of ciphers available:");
 	puts("\n1. Caesar shift");
 	puts("2. Scytale cipher");
-	printf("Enter the number of cipher: ");
+	puts("3. Atbash cipher");
+	printf("\nEnter the number of cipher: ");
 	scanf("%d", &input);
-	switch (input) {
-	case 1:
+	if (input == 1) {
 		caesarEncrypt();
-	case 2:
+	}
+	else if (input == 2) {
 		scytaleEncrypt();
+	}
+	else if (input == 3) {
+		atbashEncrypt();
+	}
+	else {
+		printf("Nothiing");
 	}
 }
 void decryptMenu() {
@@ -52,13 +60,17 @@ void decryptMenu() {
 	puts("\nList of ciphers available:");
 	puts("\n1. Caesar shift");
 	puts("2. Scytale cipher");
+	puts("3. Atbash cipher");
 	printf("\nEnter the number of cipher: ");
 	scanf("%d", &input);
-	switch (input) {
-	case 1:
+	if (input == 1) {
 		caesarDecrypt();
-	case 2:
+	}
+	else if (input == 2) {
 		scytaleDecrypt();
+	}
+	else if (input == 3) {
+		atbashDecrypt();
 	}
 
 }
@@ -67,7 +79,7 @@ void caesarEncrypt() {
 	char* input;
 	input = (char*)malloc(sizeof(char) * 2001);
 	puts("\nThe Caesar shift is one of the oldest encryption techniques was used by Julius Caesar to encrypt");
-	puts("millitary messages. This is a substitution cipher and it usually shifted and alphabets with 3 alphabets\n");
+	puts("millitary messages. This is a substitution cipher and it usually shifted and alphabets with 3 alphabets");
 	puts("down the alphabets. My program lets the user use this substitution for any shift value between 1-25.\n");
 	printf("\nEnter the shift value (1-25): ");
 	scanf("%d", &shift);
@@ -81,7 +93,7 @@ void caesarEncrypt() {
 		}
 	}
 	puts("\nEncrypted text:\n");
-	printf("%s", input);
+	fputs(input, stdout);
 	free(input);
 }
 void caesarDecrypt() {
@@ -100,7 +112,7 @@ void caesarDecrypt() {
 		}
 	}
 	puts("\nDecrypted text:\n");
-	printf("%s", input);
+	fputs(input, stdout);
 	free(input);
 }
 void scytaleEncrypt() {
@@ -188,4 +200,26 @@ void scytaleDecrypt() {
 	}
 	free(input);
 	free(output);
+}
+void atbashEncrypt() {
+	//remember 27-n
+	char* input;
+	input = (char*)malloc(sizeof(char) * 2001);
+	puts("\nThis an ancient cipher which has been used to encrypt the Hebrew alphabet. Its usage can be extensively");
+	puts("seen in Biblical verses of the old testament or the Hebrew Bible\n");
+	puts("Enter text for encryption in Atbash (lowercase only):\n");
+	getchar();
+	fgets(input, 2000, stdin);
+	strtok(input, "\n"); //this to remove the \n from using fgets
+	for (int i = 0; i < strlen(input); i++) {
+		if (input[i] >= 'a' && input[i] <= 'z') {
+			input[i] = 'z' - input[i];
+		}
+	}
+	puts("\nEncrypted text:\n");
+	fputs(input, stdout);
+	free(input);
+}
+void atbashDecrypt() {
+
 }
