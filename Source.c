@@ -12,6 +12,8 @@ void scytaleEncrypt(); //function to encrypt in Scytale cipher
 void scytaleDecrypt(); //function to decrypt in scytale cipher
 void atbashEncrypt(); //function to encrypt in Atbash cipher
 void atbashDecrypt(); //function to decrypt in Atbash cipher
+void affineEncrypt(); //function to encrypt in Affine cipher
+void affineDecrypt(); //function to decipher in affine cipher 
 
 int main(void) {
 	printMenu();
@@ -40,6 +42,7 @@ void encryptMenu() {
 	puts("\n1. Caesar shift");
 	puts("2. Scytale cipher");
 	puts("3. Atbash cipher");
+	puts("4. Affine cipher");
 	printf("\nEnter the number of cipher: ");
 	scanf("%d", &input);
 	if (input == 1) {
@@ -51,8 +54,12 @@ void encryptMenu() {
 	else if (input == 3) {
 		atbashEncrypt();
 	}
+	else if (input == 4) {
+		affineEncrypt();
+	}
 	else {
-		printf("Nothiing");
+		fputs("Wrong input!", stdout);
+		return;
 	}
 }
 void decryptMenu() {
@@ -61,6 +68,7 @@ void decryptMenu() {
 	puts("\n1. Caesar shift");
 	puts("2. Scytale cipher");
 	puts("3. Atbash cipher");
+	puts("4. Affine cipher");
 	printf("\nEnter the number of cipher: ");
 	scanf("%d", &input);
 	if (input == 1) {
@@ -72,7 +80,13 @@ void decryptMenu() {
 	else if (input == 3) {
 		atbashDecrypt();
 	}
-
+	else if (input == 4) {
+		affineDecrypt();
+	}
+	else {
+		fputs("Wrong input!", stdout);
+		return;
+	}
 }
 void caesarEncrypt() {
 	int shift = 0;
@@ -199,7 +213,7 @@ void atbashEncrypt() {
 	char* input = (char*)malloc(sizeof(char) * 2001);
 	puts("\nThis an ancient cipher which has been used to encrypt the Hebrew alphabet. Its usage can be extensively");
 	puts("seen in Biblical verses of the old testament or the Hebrew Bible\n");
-	puts("Enter text for encryption in Atbash (lowercase only):\n");
+	puts("Enter text for encryption in Atbash cipher:\n");
 	getchar();
 	fgets(input, 2000, stdin);
 	strtok(input, "\n"); //this to remove the \n from using fgets
@@ -232,4 +246,62 @@ void atbashDecrypt() {
 	puts("\nDecrypted text:\n");
 	fputs(input, stdout);
 	free(input);
+}
+void affineEncrypt() {
+	char* input = (char*)malloc(sizeof(char) * 2001);
+	int a, b;
+	puts("\nThe Affine cipher is a type of a mono-alphabetic substituion cipher where each letter is represented by a");
+	puts("number which is substituted in a linear equation and the resulting number obtained is replaced by an alphabet.");
+	puts("My version of the Affine cipher will utilize (ax + b) as the function where 'a' and 'b' are entered by the user");
+	printf("\nEnter value of 'a' (Must be co-prime with 26): ");
+	scanf("%d", &a);
+	printf("Enter value of 'b': ");
+	scanf("%d", &b);
+	puts("\nEnter text for encryption in Affine cipher:\n");
+	getchar();
+	fgets(input, 2000, stdin);
+	strtok(input, "\n"); //this to remove the \n from using fgets
+	for (int i = 0; i < strlen(input); i++) {
+		if (input[i] >= 'a' && input[i] <= 'z') {
+			input[i] = ((((a * input[i]) + b) - 'a') % 26) + 'a';
+		}
+		else if (input[i] >= 'A' && input[i] <= 'Z') {
+			input[i] = ((((a * input[i]) + b) - 'A') % 26) + 'A';
+		}
+	}
+	puts("\nEncrypted text:\n");
+	fputs(input, stdout);
+	free(input);
+}
+void affineDecrypt() {
+	char* input = (char*)malloc(sizeof(char) * 2001);
+	int a, b;
+	printf("\nEnter value of 'a' (Must be co-prime with 26): ");
+	scanf("%d", &a);
+	printf("Enter value of 'b': ");
+	scanf("%d", &b);
+	puts("Enter text for Decryption in Affine cipher:\n");
+	getchar();
+	fgets(input, 2000, stdin);
+	strtok(input, "\n"); //this to remove the \n from using fgets
+	for (int i = 0; i < strlen(input); i++) {
+		
+		if (input[i] >= 'a' && input[i] <= 'z') {
+			input[i] = ((((moduloMultiInverse(a)) * (input[i] - b)) - 'a') % 26) + 'a';
+		}
+		else if (input[i] >= 'A' && input[i] <= 'Z') {
+			input[i] = ((((moduloMultiInverse(a)) * (input[i] - b)) - 'A') % 26) + 'A';
+		}
+	}
+	puts("\nDecrypted text:\n");
+	fputs(input, stdout);
+	free(input);
+}
+int moduloMultiInverse(int a) {
+	a = a % 26;
+	for (int inverse = 1; inverse < 26; inverse++) {
+		if ((a * inverse) % 26 == 1) {
+			return inverse;
+		}
+	}
 }
