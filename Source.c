@@ -14,6 +14,9 @@ void atbashEncrypt(); //function to encrypt in Atbash cipher
 void atbashDecrypt(); //function to decrypt in Atbash cipher
 void affineEncrypt(); //function to encrypt in Affine cipher
 void affineDecrypt(); //function to decipher in affine cipher 
+int moduloMultiInverse(int a); //function to calculate the modular multiplicative inverse of an integer a with 26
+void vigenereEncrypt();
+void vigenereDecrypt();
 
 int main(void) {
 	printMenu();
@@ -39,23 +42,32 @@ void printMenu() {
 void encryptMenu() {
 	int input = 0;
 	puts("\nList of ciphers available:");
-	puts("\n1. Caesar shift");
-	puts("2. Scytale cipher");
-	puts("3. Atbash cipher");
+	puts("\n1. Atbash cipher (circa 500 B.C.E");
+	puts("2. Scytale cipher (circa 440 B.C.E");
+	puts("3. Caesar shift  (circa 60 B.C.E)");
 	puts("4. Affine cipher");
+	puts("5. Vigenere cipher (circa 1500 C.E");
+	puts("6. Bacon cipher (1605 C.E)");
+	puts("7. Playfair cipher  (1854 C.E)");
+	puts("8. Bifid cipher (circa 1900 C.E)");
+	puts("9. ADVGVX cipher (circa 1917 C.E)");
+	puts("10. Hill Cipher (1929 C.E)");
 	printf("\nEnter the number of cipher: ");
 	scanf("%d", &input);
 	if (input == 1) {
-		caesarEncrypt();
+		atbashEncrypt();
 	}
 	else if (input == 2) {
 		scytaleEncrypt();
 	}
 	else if (input == 3) {
-		atbashEncrypt();
+		caesarEncrypt();
 	}
 	else if (input == 4) {
 		affineEncrypt();
+	}
+	else if (input == 5) {
+		vigenereEncrypt();
 	}
 	else {
 		fputs("Wrong input!", stdout);
@@ -65,23 +77,32 @@ void encryptMenu() {
 void decryptMenu() {
 	int input = 0;
 	puts("\nList of ciphers available:");
-	puts("\n1. Caesar shift");
-	puts("2. Scytale cipher");
-	puts("3. Atbash cipher");
+	puts("\n1. Atbash cipher (circa 500 B.C.E)");
+	puts("2. Scytale cipher (circa 440 B.C.E(");
+	puts("3. Caesar shift  (circa 60 B.C.E)");
 	puts("4. Affine cipher");
+	puts("5. Vigenere cipher (circa 1500 C.E");
+	puts("6. Bacon cipher (1605 C.E)");
+	puts("7. Playfair cipher  (1854 C.E)");
+	puts("8. Bifid cipher (circa 1900 C.E)");
+	puts("9. ADVGVX cipher (circa 1917 C.E)");
+	puts("10. Hill Cipher (1929 C.E)");
 	printf("\nEnter the number of cipher: ");
 	scanf("%d", &input);
 	if (input == 1) {
-		caesarDecrypt();
+		atbashDecrypt();
 	}
 	else if (input == 2) {
 		scytaleDecrypt();
 	}
 	else if (input == 3) {
-		atbashDecrypt();
+		caesarDecrypt();
 	}
 	else if (input == 4) {
 		affineDecrypt();
+	}
+	else if (input == 5) {
+		vigenereDecrypt();
 	}
 	else {
 		fputs("Wrong input!", stdout);
@@ -304,4 +325,78 @@ int moduloMultiInverse(int a) {
 			return inverse;
 		}
 	}
+}
+void vigenereEncrypt() {
+	char* input = (char*)malloc(sizeof(char) * 2001);
+	char* key = (char*)malloc(sizeof(char) * 2001);
+	char*newKey = (char*)malloc(sizeof(char) * 2001);
+	puts("\nThis is a type of poly-alphabetic substitution cipher which was first described by Giovan Battista Bellaso");
+	puts("in 1553. This cipher utilizes a table which has the alphabet written out 26 times in different rows with each");
+	puts("alphabet being shifted cyclically to the left i.e 26 possible Caesar shifts. For each alphabet to be encrypted,");
+	puts("the cipher uses an alphabet from the table my matching the original input with the key. This cipher wasn't");
+	puts("broken until 1863 by Freidrich Kasiski. This earned it the desciption of 'le chiffre indechiffrable'.");
+	puts("This cipher was misattributed to Blaise de Vigenere in the 19th century and so acquired its current name");
+	fputs("\nEnter the key (no spaces to be entered & text in lower case): ", stdout);
+	getchar();
+	fgets(key, 2000, stdin);
+	strtok(key, "\n"); //this to remove the \n from using fgets
+	
+	puts("\nEnter text for encryption in Vigenere cipher (no spaces to be entered & text in lower case):\n");
+	fgets(input, 2000, stdin);
+	strtok(input, "\n"); //this to remove the \n from using fgets
+	int i, j;
+	for (i = 0, j = 0; i < strlen(input); i++) {
+		if (j < strlen(key)) {
+			newKey[i] = key[j];
+			j++;
+		}
+		else {
+			j = 0;
+			newKey[i] = key[j];
+			j++;
+		}
+	}
+	newKey[i] = '\0';
+	free(key);
+	for (int i = 0; i < strlen(input); i++) {
+		input[i] = (((input[i] - 'a') + (newKey[i] - 'a')) % 26) + 'a';
+	}
+	puts("\nEncrypted text:\n");
+	fputs(input, stdout);
+	free(newKey);
+	free(input);
+}
+void vigenereDecrypt() {
+	char* input = (char*)malloc(sizeof(char) * 2001);
+	char* key = (char*)malloc(sizeof(char) * 2001);
+	char* newKey = (char*)malloc(sizeof(char) * 2001);
+	fputs("\nEnter the key (no spaces to be entered & text in lower case): ", stdout);
+	getchar();
+	fgets(key, 2000, stdin);
+	strtok(key, "\n"); //this to remove the \n from using fgets
+
+	puts("\nEnter text for decryption in Vigenere cipher (no spaces to be entered & text in lower case):\n");
+	fgets(input, 2000, stdin);
+	strtok(input, "\n"); //this to remove the \n from using fgets
+	int i, j;
+	for (i = 0, j = 0; i < strlen(input); i++) {
+		if (j < strlen(key)) {
+			newKey[i] = key[j];
+			j++;
+		}
+		else {
+			j = 0;
+			newKey[i] = key[j];
+			j++;
+		}
+	}
+	newKey[i] = '\0';
+	free(key);
+	for (int i = 0; i < strlen(input); i++) {
+		input[i] = (((input[i] - 'a') - (newKey[i] - 'a') + 26) % 26) + 'a';
+	}
+	puts("\nDecrypted text:\n");
+	fputs(input, stdout);
+	free(newKey);
+	free(input);
 }
