@@ -15,8 +15,11 @@ void atbashDecrypt(); //function to decrypt in Atbash cipher
 void affineEncrypt(); //function to encrypt in Affine cipher
 void affineDecrypt(); //function to decipher in affine cipher 
 int moduloMultiInverse(int a); //function to calculate the modular multiplicative inverse of an integer a with 26
-void vigenereEncrypt();
-void vigenereDecrypt();
+void vigenereEncrypt(); //function to encrypt in Vigenere cipher
+void vigenereDecrypt(); //function to decrypt in Vigenere cipher 
+void baconEncrypt(); //function to encrypt in Bacon's cipher 
+void baconDecrypt(); //function to decrypt in Bacon's cipher
+
 
 int main(void) {
 	printMenu();
@@ -69,6 +72,9 @@ void encryptMenu() {
 	else if (input == 5) {
 		vigenereEncrypt();
 	}
+	else if (input == 6) {
+		baconEncrypt();
+	}
 	else {
 		fputs("Wrong input!", stdout);
 		return;
@@ -103,6 +109,9 @@ void decryptMenu() {
 	}
 	else if (input == 5) {
 		vigenereDecrypt();
+	}
+	else if (input == 6) {
+		baconDecrypt();
 	}
 	else {
 		fputs("Wrong input!", stdout);
@@ -398,5 +407,257 @@ void vigenereDecrypt() {
 	puts("\nDecrypted text:\n");
 	fputs(input, stdout);
 	free(newKey);
+	free(input);
+}
+void baconEncrypt() {
+	char* input = (char*)malloc(sizeof(char) * 2001);
+	puts("\nThis was devised by Francis Bacon in 1605. This cipher is an example of steganography where a message is");
+	puts("hidden in the presentation of text, rather than its content. This is done by replacing each alphabet of");
+	puts("the text with a group of 5 letters conisting of 'a' and 'b'.");
+	puts("\nEnter text for encryption in Bacon cipher (uppercase alphabets only):\n");
+	getchar();
+	fgets(input, 2000, stdin);
+	strtok(input, "\n"); //this to remove the \n from using fgets
+	char** output = (char**)calloc(strlen(input), sizeof(char*));
+	for (int i = 0; i < strlen(input); i++) {
+		output[i] = (char*)calloc(7, sizeof(char));
+	}
+	for (int i = 0; i < strlen(input); i++) {
+		if (input[i] == 'A') {
+			strncpy(output[i], "aaaaa ", 7);
+		}
+		else if (input[i] == 'B') {
+			strncpy(output[i], "aaaab ", 7);
+		}
+		else if (input[i] == 'C') {
+			strncpy(output[i], "aaaba ", 7);
+
+		}
+		else if (input[i] == 'D') {
+			strncpy(output[i], "aaabb ", 7);
+
+		}
+		else if (input[i] == 'E') {
+			strncpy(output[i], "aabaa ", 7);
+
+		}
+		else if (input[i] == 'F') {
+			strncpy(output[i], "aabab ", 7);
+
+		}
+		else if (input[i] == 'G') {
+			strncpy(output[i], "aabba ", 7);
+
+		}
+		else if (input[i] == 'H') {
+			strncpy(output[i], "aabbb ", 7);
+
+		}
+		else if (input[i] == 'I') {
+			strncpy(output[i], "abaaa ", 7);
+
+		}
+		else if (input[i] == 'J') {
+			strncpy(output[i], "abaab ", 7);
+
+		}
+		else if (input[i] == 'K') {
+			strncpy(output[i], "ababa ", 7);
+
+		}
+		else if (input[i] == 'L') {
+			strncpy(output[i], "ababb ", 7);
+
+		}
+		else if (input[i] == 'M') {
+			strncpy(output[i], "abbaa ", 7);
+
+		}
+		else if (input[i] == 'N') {
+			strncpy(output[i], "abbab ", 7);
+
+		}
+		else if (input[i] == 'O') {
+			strncpy(output[i], "abbba ", 7);
+
+		}
+		else if (input[i] == 'P') {
+			strncpy(output[i], "abbbb ", 7);
+
+		}
+		else if (input[i] == 'Q') {
+			strncpy(output[i], "baaaa ", 7);
+
+		}
+		else if (input[i] == 'R') {
+			strncpy(output[i], "baaab ", 7);
+
+		}
+		else if (input[i] == 'S') {
+			strncpy(output[i], "baaba ", 7);
+
+		}
+		else if (input[i] == 'T') {
+			strncpy(output[i], "baabb ", 7);
+
+		}
+		else if (input[i] == 'U') {
+			strncpy(output[i], "babaa ", 7);
+
+		}
+		else if (input[i] == 'V') {
+			strncpy(output[i], "babab ", 7);
+
+		}
+		else if (input[i] == 'W') {
+			strncpy(output[i], "babab ", 7);
+
+		}
+		else if (input[i] == 'X') {
+			strncpy(output[i], "babbb ", 7);
+
+		}
+		else if (input[i] == 'Y') {
+			strncpy(output[i], "bbaaa ", 7);
+
+		}
+		else if (input[i] == 'Z') {
+			strncpy(output[i], "bbaab ", 7);
+
+		}
+		else {
+			continue;
+		}
+	}
+	puts("\nEncrypted text:\n");
+	for (int i = 0; i < strlen(input); i++) {
+		fputs(output[i], stdout);
+	}
+	
+	for (int i = 0; i < strlen(input); i++) {
+		free(output[i]);
+	}
+	free(input);
+	free(output);
+}
+void baconDecrypt() {
+	char* input = (char*)malloc(sizeof(char) * 2001);
+	puts("Enter text for Decryption in Bacon cipher:\n");
+	getchar();
+	fgets(input, 2000, stdin);
+	strtok(input, "\n"); //this to remove the \n from using fgets
+	//use string delimitter strtok 
+	puts("\nDecrypted text:\n");
+	char* token = strtok(input, " ");
+	while (token != NULL) {
+		if (strncmp(token, "aaaaa", 5) == 0) {
+			printf("A");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "aaaab", 5) == 0) {
+			printf("B");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "aaaba", 5) == 0) {
+			printf("C");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "aaabb", 5) == 0) {
+			printf("D");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "aabaa", 5) == 0) {
+			printf("E");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "aabab", 5) == 0) {
+			printf("F");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "aabba", 5) == 0) {
+			printf("G");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "aabbb", 5) == 0) {
+			printf("H");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "abaaa", 5) == 0) {
+			printf("I");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "abaab", 5) == 0) {
+			printf("J");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "ababa", 5) == 0) {
+			printf("K");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "ababb", 5) == 0) {
+			printf("L");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "abbaa", 5) == 0) {
+			printf("M");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "abbab", 5) == 0) {
+			printf("N");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "abbba", 5) == 0) {
+			printf("O");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "abbbb", 5) == 0) {
+			printf("P");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "baaaa", 5) == 0) {
+			printf("Q");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "baaab", 5) == 0) {
+			printf("R");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "baaba", 5) == 0) {
+			printf("S");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "baabb", 5) == 0) {
+			printf("T");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "babaa", 5) == 0) {
+			printf("U");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "babab", 5) == 0) {
+			printf("V");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "babba", 5) == 0) {
+			printf("W");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "babbb", 5) == 0) {
+			printf("X");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "bbaaa", 5) == 0) {
+			printf("Y");
+			token = strtok(NULL, " ");
+		}
+		else if (strncmp(token, "bbaab", 5) == 0) {
+			printf("Z");
+			token = strtok(NULL, " ");
+		}
+		else {
+		puts("Wrong input!");
+		return;
+		}
+	}
 	free(input);
 }
