@@ -13,13 +13,16 @@ void scytaleDecrypt(); //function to decrypt in scytale cipher
 void atbashEncrypt(); //function to encrypt in Atbash cipher
 void atbashDecrypt(); //function to decrypt in Atbash cipher
 void affineEncrypt(); //function to encrypt in Affine cipher
-void affineDecrypt(); //function to decipher in affine cipher 
+void affineDecrypt(); //function to decipher in affine cipher
 int moduloMultiInverse(int a); //function to calculate the modular multiplicative inverse of an integer a with 26
 void vigenereEncrypt(); //function to encrypt in Vigenere cipher
-void vigenereDecrypt(); //function to decrypt in Vigenere cipher 
-void baconEncrypt(); //function to encrypt in Bacon's cipher 
+void vigenereDecrypt(); //function to decrypt in Vigenere cipher
+void baconEncrypt(); //function to encrypt in Bacon's cipher
 void baconDecrypt(); //function to decrypt in Bacon's cipher
-
+void playfairEncrypt(); //function to encrypt in Playfair's cipher
+void createGrid(char* key);
+void searchDelete(char* alphabet, char keyLetter);
+void playfairDecrypt(); //function to decrypt in Playfair's cipher
 
 int main(void) {
 	printMenu();
@@ -75,6 +78,9 @@ void encryptMenu() {
 	else if (input == 6) {
 		baconEncrypt();
 	}
+	else if (input == 7) {
+		playfairEncrypt();
+	}
 	else {
 		fputs("Wrong input!", stdout);
 		return;
@@ -112,6 +118,9 @@ void decryptMenu() {
 	}
 	else if (input == 6) {
 		baconDecrypt();
+	}
+	else if (input == 7) {
+		playfairDecrypt();
 	}
 	else {
 		fputs("Wrong input!", stdout);
@@ -166,8 +175,8 @@ void scytaleEncrypt() {
 	printf("\nEnter the diameter (only positive integer): ");
 	scanf("%d", &diameter);
 	getchar(); //to remove the enter from scanf
-	
-	char** output = (char**)calloc(strlen(input)+2, sizeof(char*));
+
+	char** output = (char**)calloc(strlen(input) + 2, sizeof(char*));
 	for (int i = 0; i < strlen(input) + 2; i++) {
 		output[i] = (char*)calloc(strlen(input) + 2, sizeof(char));
 	}
@@ -315,7 +324,6 @@ void affineDecrypt() {
 	fgets(input, 2000, stdin);
 	strtok(input, "\n"); //this to remove the \n from using fgets
 	for (int i = 0; i < strlen(input); i++) {
-		
 		if (input[i] >= 'a' && input[i] <= 'z') {
 			input[i] = ((((moduloMultiInverse(a)) * (input[i] - b)) - 'a') % 26) + 'a';
 		}
@@ -338,7 +346,7 @@ int moduloMultiInverse(int a) {
 void vigenereEncrypt() {
 	char* input = (char*)malloc(sizeof(char) * 2001);
 	char* key = (char*)malloc(sizeof(char) * 2001);
-	char*newKey = (char*)malloc(sizeof(char) * 2001);
+	char* newKey = (char*)malloc(sizeof(char) * 2001);
 	puts("\nThis is a type of poly-alphabetic substitution cipher which was first described by Giovan Battista Bellaso");
 	puts("in 1553. This cipher utilizes a table which has the alphabet written out 26 times in different rows with each");
 	puts("alphabet being shifted cyclically to the left i.e 26 possible Caesar shifts. For each alphabet to be encrypted,");
@@ -349,7 +357,7 @@ void vigenereEncrypt() {
 	getchar();
 	fgets(key, 2000, stdin);
 	strtok(key, "\n"); //this to remove the \n from using fgets
-	
+
 	puts("\nEnter text for encryption in Vigenere cipher (no spaces to be entered & text in lower case):\n");
 	fgets(input, 2000, stdin);
 	strtok(input, "\n"); //this to remove the \n from using fgets
@@ -431,99 +439,75 @@ void baconEncrypt() {
 		}
 		else if (input[i] == 'C') {
 			strncpy(output[i], "aaaba ", 7);
-
 		}
 		else if (input[i] == 'D') {
 			strncpy(output[i], "aaabb ", 7);
-
 		}
 		else if (input[i] == 'E') {
 			strncpy(output[i], "aabaa ", 7);
-
 		}
 		else if (input[i] == 'F') {
 			strncpy(output[i], "aabab ", 7);
-
 		}
 		else if (input[i] == 'G') {
 			strncpy(output[i], "aabba ", 7);
-
 		}
 		else if (input[i] == 'H') {
 			strncpy(output[i], "aabbb ", 7);
-
 		}
 		else if (input[i] == 'I') {
 			strncpy(output[i], "abaaa ", 7);
-
 		}
 		else if (input[i] == 'J') {
 			strncpy(output[i], "abaab ", 7);
-
 		}
 		else if (input[i] == 'K') {
 			strncpy(output[i], "ababa ", 7);
-
 		}
 		else if (input[i] == 'L') {
 			strncpy(output[i], "ababb ", 7);
-
 		}
 		else if (input[i] == 'M') {
 			strncpy(output[i], "abbaa ", 7);
-
 		}
 		else if (input[i] == 'N') {
 			strncpy(output[i], "abbab ", 7);
-
 		}
 		else if (input[i] == 'O') {
 			strncpy(output[i], "abbba ", 7);
-
 		}
 		else if (input[i] == 'P') {
 			strncpy(output[i], "abbbb ", 7);
-
 		}
 		else if (input[i] == 'Q') {
 			strncpy(output[i], "baaaa ", 7);
-
 		}
 		else if (input[i] == 'R') {
 			strncpy(output[i], "baaab ", 7);
-
 		}
 		else if (input[i] == 'S') {
 			strncpy(output[i], "baaba ", 7);
-
 		}
 		else if (input[i] == 'T') {
 			strncpy(output[i], "baabb ", 7);
-
 		}
 		else if (input[i] == 'U') {
 			strncpy(output[i], "babaa ", 7);
-
 		}
 		else if (input[i] == 'V') {
 			strncpy(output[i], "babab ", 7);
-
 		}
 		else if (input[i] == 'W') {
 			strncpy(output[i], "babab ", 7);
-
 		}
 		else if (input[i] == 'X') {
 			strncpy(output[i], "babbb ", 7);
-
 		}
 		else if (input[i] == 'Y') {
 			strncpy(output[i], "bbaaa ", 7);
-
 		}
 		else if (input[i] == 'Z') {
 			strncpy(output[i], "bbaab ", 7);
-
 		}
 		else {
 			continue;
@@ -533,7 +517,7 @@ void baconEncrypt() {
 	for (int i = 0; i < strlen(input); i++) {
 		fputs(output[i], stdout);
 	}
-	
+
 	for (int i = 0; i < strlen(input); i++) {
 		free(output[i]);
 	}
@@ -546,7 +530,7 @@ void baconDecrypt() {
 	getchar();
 	fgets(input, 2000, stdin);
 	strtok(input, "\n"); //this to remove the \n from using fgets
-	//use string delimitter strtok 
+	//use string delimitter strtok
 	puts("\nDecrypted text:\n");
 	char* token = strtok(input, " ");
 	while (token != NULL) {
@@ -655,9 +639,120 @@ void baconDecrypt() {
 			token = strtok(NULL, " ");
 		}
 		else {
-		puts("Wrong input!");
-		return;
+			puts("Wrong input!");
+			return;
 		}
 	}
 	free(input);
+}
+void playfairEncrypt() {
+	char* key = (char*)malloc(sizeof(char) * 1500);
+	char** table = (char**)malloc(sizeof(char*) * 5);
+	for (int i = 0; i < 5; i++) {
+		table[i] = (char*)malloc(sizeof(char) * 5);
+	}
+	puts("\nThis encryption scheme was devised by Charles Wheatstone in 1854 but it is named after Lord Playfair for promoting");
+	puts("its usage. This cipher encrypts a pair of letters or digrams and is thus harder to decode using frequency analysis");
+	puts("than a substitution cipher. This cipher was extensively used in the second Boer war and World War 1 due to  ");
+	puts("the ease with which messages could be encoded");
+	fputs("\nEnter a key (no spaces should be entered, no repeated alphabet and lowercase only): ", stdout);
+	getchar();
+	fgets(key, 1499, stdin);
+	strtok(key, "\n"); //this to remove the \n from using fgets
+	createGrid(key, table);
+	free(key); //maybe
+	char* input = (char*)malloc(sizeof(char) * 2001);
+	puts("\nEnter text for encryption in Playfair cipher:\n");
+	fgets(input, 2000, stdin);
+	strtok(input, "\n");
+	int inputLength = strlen(input);
+	if (inputLength % 2 != 0) {
+		input[inputLength] = 'z';
+		input[inputLength + 1] = '\0';
+	}
+	int inputCounter, row, col, r1, c1, r2, c2;
+	char l1, l2;
+	for (inputCounter = 0; inputCounter < strlen(input) - 1; inputCounter += 2) {
+		l1 = input[inputCounter];
+		l2 = input[inputCounter + 1];
+		for (row = 0; row < 5; row++) {
+			for (col = 0; col < 5; col++) {
+				if (table[row][col] == l1) {
+					r1 = row;
+					c1 = col;
+				}if (table[row][col] == l2) {
+					r2 = row;
+					c2 = col;
+				}
+			}
+		}
+		if (c1 == c2) {
+			input[inputCounter] = table[r1 + 1][c1];
+			input[inputCounter + 1] = table[r2 + 1][c1];
+		}
+		else if (r1 == r2) {
+			input[inputCounter] = table[r1][c1 + 1];
+			input[inputCounter + 1] = table[r1][c2 + 1];
+		}
+		else {
+			input[inputCounter] = table[r1][c2];
+			input[inputCounter + 1] = table[r2][c1];
+		}
+	}
+	for (int i = 0; i < 5; i++) {
+		free(table[i]);
+	}
+	free(table);
+	puts("\nEncrypted text:\n");
+	fputs(input, stdout);
+	free(input);
+}
+void createGrid(char* key, char** table) {
+	char* alphabet = (char*)malloc(sizeof(char) * 26);
+	char letter = 'a';
+	char keyLetter;
+	int i;
+	for (i = 0; i < 25; i++) {
+		if (letter != 'j') {
+			alphabet[i] = letter;
+			letter++;
+		}
+		else {
+			letter++;
+			i--;
+		}
+	}
+	alphabet[i] = '\0';
+	//implement a search and delete feature here
+	for (int k = 0; k < strlen(key); k++) {
+		keyLetter = key[k];
+		searchDelete(alphabet, keyLetter);
+	}
+
+	int a = 0, b = 0, j = 0;
+	for (a = 0; a < 5; a++) {
+		for (j = 0; j < 5; j++) {
+			if (((5 * a) + j) < strlen(key)) {
+				table[a][j] = key[((5 * a) + j)];
+			}
+			else {
+				if (alphabet[b] != NULL) {
+					table[a][j] = alphabet[b];
+					b++;
+				}
+			}
+		}
+	}
+	free(alphabet);
+}
+void searchDelete(char* alphabet, char keyLetter) {
+	int i, j;
+	for (i = 0, j = 0; i < strlen(alphabet); i++) {
+		if (alphabet[i] != keyLetter) {
+			alphabet[j++] = alphabet[i];
+		}
+	}
+	alphabet[j] = '\0';
+}
+void playfairDecrypt() {
 }
