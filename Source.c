@@ -777,4 +777,77 @@ void searchDelete(char* alphabet, char keyLetter) {
 	alphabet[j] = '\0';
 }
 void playfairDecrypt() {
+	char* key = (char*)malloc(sizeof(char) * 1500);
+	char** table = (char**)malloc(sizeof(char*) * 5);
+	for (int i = 0; i < 5; i++) {
+		table[i] = (char*)malloc(sizeof(char) * 5);
+	}
+	fputs("\nEnter a key (no spaces should be entered, no repeated alphabet and lowercase only): ", stdout);
+	getchar();
+	fgets(key, 1499, stdin);
+	strtok(key, "\n"); //this to remove the \n from using fgets
+	createGrid(key, table);
+	free(key);
+	char* input = (char*)malloc(sizeof(char) * 2001);
+	puts("\nEnter text for decryption in Playfair cipher:\n");
+	fgets(input, 2000, stdin);
+	strtok(input, "\n");
+	int inputCounter, row, col, r1, c1, r2, c2;
+	char l1, l2;
+	for (inputCounter = 0; inputCounter < strlen(input) - 1; inputCounter += 2) {
+		l1 = input[inputCounter];
+		l2 = input[inputCounter + 1];
+		for (row = 0; row < 5; row++) {
+			for (col = 0; col < 5; col++) {
+				if (table[row][col] == l1) {
+					r1 = row;
+					c1 = col;
+				}if (table[row][col] == l2) {
+					r2 = row;
+					c2 = col;
+				}
+			}
+		}
+		if (c1 == c2) {
+			if (r1 != 0 && r2 != 0) {
+				input[inputCounter] = table[r1 - 1][c1];
+				input[inputCounter + 1] = table[r2 - 1][c2];
+			}
+			else {
+				if (r1 == 0 && r2 != 0) {
+					input[inputCounter] = table[4][c1];
+					input[inputCounter + 1] = table[r2 - 1][c1];
+				}if (r2 == 0 && r1 != 0) {
+					input[inputCounter] = table[r1 - 1][c1];
+					input[inputCounter + 1] = table[4][c1];
+				}
+			}
+		}
+		else if (r1 == r2) {
+			if (c1 != 0 && c2 != 0) {
+				input[inputCounter] = table[r1][c1 - 1];
+				input[inputCounter + 1] = table[r2][c2 - 1];
+			}
+			else {
+				if (c1 == 0 && c2 != 0) {
+					input[inputCounter] = table[r1][4];
+					input[inputCounter + 1] = table[r2][c2 - 1];
+				}if (c2 == 0 && c1 != 0) {
+					input[inputCounter] = table[r1][c1 - 1];
+					input[inputCounter + 1] = table[r2][4];
+				}
+			}
+		}
+		else {
+			input[inputCounter] = table[r1][c2];
+			input[inputCounter + 1] = table[r2][c1];
+		}
+	}
+	for (int i = 0; i < 5; i++) {
+		free(table[i]);
+	}
+	free(table);
+	puts("\nDecrypted text:\n");
+	fputs(input, stdout);
+	free(input);
 }
