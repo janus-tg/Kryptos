@@ -687,12 +687,34 @@ void playfairEncrypt() {
 			}
 		}
 		if (c1 == c2) {
-			input[inputCounter] = table[r1 + 1][c1];
-			input[inputCounter + 1] = table[r2 + 1][c1];
+			if (r1 != 4 && r2 != 4) {
+				input[inputCounter] = table[r1 + 1][c1];
+				input[inputCounter + 1] = table[r2 + 1][c1];
+			}
+			else {
+				if (r1 == 4 && r2 != 4) {
+					input[inputCounter] = table[0][c1];
+					input[inputCounter + 1] = table[r2 + 1][c1];
+				}if (r2 == 4 && r1 != 4) {
+					input[inputCounter] = table[r1 + 1][c1];
+					input[inputCounter + 1] = table[0][c1];
+				}
+			}
 		}
 		else if (r1 == r2) {
-			input[inputCounter] = table[r1][c1 + 1];
-			input[inputCounter + 1] = table[r1][c2 + 1];
+			if (c1 != 4 && c2 != 4) {
+				input[inputCounter] = table[r1][c1 + 1];
+				input[inputCounter + 1] = table[r2][c2 + 1];
+			}
+			else {
+				if (c1 == 4 && c2 != 4) {
+					input[inputCounter] = table[r1][0];
+					input[inputCounter + 1] = table[r2][c2 + 1];
+				}if (c2 == 4 && c1 != 4) {
+					input[inputCounter] = table[r1][c1 + 1];
+					input[inputCounter + 1] = table[r2][0];
+				}
+			}
 		}
 		else {
 			input[inputCounter] = table[r1][c2];
