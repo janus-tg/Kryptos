@@ -930,5 +930,47 @@ void bifidDecrypt() {
 	for (int i = 0; i < 5; i++) {
 		table[i] = (char*)malloc(sizeof(char) * 5);
 	}
-
+	fputs("\nEnter a key (no spaces should be entered, no repeated alphabet and lowercase only): ", stdout);
+	getchar();
+	fgets(key, 1499, stdin);
+	strtok(key, "\n"); //this to remove the \n from using fgets
+	polybius(key, table);
+	free(key); //maybe
+	char* input = (char*)malloc(sizeof(char) * 2001);
+	puts("\nEnter text for decryption in Bifid cipher:\n");
+	fgets(input, 2000, stdin);
+	strtok(input, "\n");
+	int* coordinate = (int*)malloc(sizeof(int) * 2 * (strlen(input) + 1));
+	int* column = (int*)malloc(sizeof(int) * (strlen(input) + 2));
+	int inputCounter, row, col, i = 0, j = 0, k = 0, r1, c1;
+	char letter;
+	for (inputCounter = 0; inputCounter < strlen(input); inputCounter++) {
+		letter = input[inputCounter];
+		for (row = 0; row < 5; row++) {
+			for (col = 0; col < 5; col++) {
+				if (letter == table[row][col]) {
+					coordinate[i] = row;
+					column[i] = col;
+					i++;
+				}
+			}
+		}
+	}
+	for (j = 0, k = i; j <= i; j++, k++) {
+		coordinate[k] = column[j];
+	}
+	free(column);
+	for (int a = 0, b = 0; b < j - 1; a += 2, b++) {
+		r1 = coordinate[a];
+		c1 = coordinate[a + 1];
+		input[b] = table[r1][c1];
+	}
+	free(coordinate);
+	for (int i = 0; i < 5; i++) {
+		free(table[i]);
+	}
+	free(table);
+	puts("\nDecrypted text:\n");
+	fputs(input, stdout);
+	free(input);
 }
