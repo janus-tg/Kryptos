@@ -23,8 +23,11 @@ void playfairEncrypt(); //function to encrypt in Playfair's cipher
 void polybius(char* key, char** table);
 void searchDelete(char* alphabet, char keyLetter);
 void playfairDecrypt(); //function to decrypt in Playfair's cipher
-void bifidEncrypt();
-void bifidDecrypt();
+void bifidEncrypt(); //function to encrypt in Bifid cipher
+void bifidDecrypt(); //function to decrypt in Bifid cipher
+void adfgxEncrypt(); //function to encrypt in ADFGX cipher
+void sort(char** newTable, int row, int col); //function to use bubble sort the column using the first row
+void adfgxDecrypt(); //function to decrypt in ADFGX cipher
 
 int main(void) {
 	printMenu();
@@ -87,7 +90,7 @@ void encryptMenu() {
 		bifidEncrypt();
 	}
 	else if (input == 9) {
-		;
+		adfgxEncrypt();
 	}
 	else if (input == 10) {
 		;
@@ -137,7 +140,7 @@ void decryptMenu() {
 		bifidDecrypt();
 	}
 	else if (input == 9) {
-		;
+		adfgxDecrypt();
 	}
 	else if (input == 10) {
 		;
@@ -973,4 +976,151 @@ void bifidDecrypt() {
 	puts("\nDecrypted text:\n");
 	fputs(input, stdout);
 	free(input);
+}
+void adfgxEncrypt() {
+	char* grid = (char*)malloc(sizeof(char) * 150);
+	char** table = (char**)malloc(sizeof(char*) * 6);
+	for (int i = 0; i < 6; i++) {
+		table[i] = (char*)malloc(sizeof(char) * 6);
+	}
+	puts("\nThe ADFGX cipher was used by the German Army during World War 1 on the western front. This cipher was invented");
+	puts("by Lieutenant Fritz Nebel. This cipher is an example of fractionating transposition cipher which combines a modified");
+	puts("Polybius square with a single columnar transposition. This utilizes the alphabets 'A', 'D', 'F', 'G' and 'X' as they");
+	puts("were are very distinct in Morse code and this reduces chances of error");
+	puts("\nEnter the polybius square (no spaces should be entered, no repeated alphabet and lowercase only):\n");
+	getchar();
+	fgets(grid, 150, stdin);
+	strtok(grid, "\n"); //this to remove the \n from using fgets
+	for (int i = 0, k = 0; i < 6; i++) {
+		for (int j = 0; j < 6; j++) {
+			if (i == 0 && j == 0) {
+				table[i][j] = ' ';
+			}
+			else if (i == 0 && j == 1) {
+				table[i][j] = 'A';
+			}
+			else if (i == 0 && j == 2) {
+				table[i][j] = 'D';
+			}
+			else if (i == 0 && j == 3) {
+				table[i][j] = 'F';
+			}
+			else if (i == 0 && j == 4) {
+				table[i][j] = 'G';
+			}
+			else if (i == 0 && j == 5) {
+				table[i][j] = 'X';
+			}
+			else if (i == 1 && j == 0) {
+				table[i][j] = 'A';
+			}
+			else if (i == 2 && j == 0) {
+				table[i][j] = 'D';
+			}
+			else if (i == 3 && j == 0) {
+				table[i][j] = 'F';
+			}
+			else if (i == 4 && j == 0) {
+				table[i][j] = 'G';
+			}
+			else if (i == 5 && j == 0) {
+				table[i][j] = 'X';
+			}
+			else {
+				table[i][j] = grid[k];
+				k++;
+			}
+		}
+	}
+	free(grid);
+	char* input = (char*)malloc(sizeof(char) * 2000);
+	char* fractionated = (char*)malloc(sizeof(char) * 4000);
+	puts("\nEnter text for encryption in ADFGX cipher:\n");
+	fgets(input, 1999, stdin);
+	int counter = 0;
+	for (int i = 0; i < strlen(input); i++) {
+		char letter = input[i];
+		for (int j = 0; j < 6; j++) {
+			for (int k = 0; k < 6; k++) {
+				if (letter == table[j][k]) {
+					fractionated[counter] = table[j][0];
+					fractionated[counter + 1] = table[0][k];
+					counter += 2;
+				}
+			}
+		}
+	}
+	for (int i = 0; i < 5; i++) {
+		free(table[i]);
+	}
+	free(table);
+	free(input);
+	fractionated[counter] = '\0';
+	char* key = (char*)malloc(sizeof(char) * 150);
+	fputs("\nEnter a transposition key (one word, no repeated alphabet and lowercase only): ", stdout);
+	fgets(key, 149, stdin);
+	strtok(key, "\n");
+	int row = strlen(fractionated) / strlen(key);
+	char** newTable = (char**)calloc(row + 1, sizeof(char*));
+	for (int i = 0; i < row + 1; i++) {
+		newTable[i] = (char*)calloc(strlen(key), sizeof(char));
+	}
+	puts("");
+	for (int i = 0, k = 0, l = 0; i < row + 1 && fractionated[k] != '\0'; i++) {
+		for (int j = 0; j < strlen(key) && fractionated[k] != '\0'; j++) {
+			if (i == 0) {
+				newTable[i][j] = key[l];
+				l++;
+			}
+			else if (fractionated[k] == ' ') {
+				j--;
+				k++;
+				continue;
+			}
+			else {
+				newTable[i][j] = fractionated[k];
+				k++;
+			}
+		}
+	}
+	sort(newTable, row, strlen(key));
+	free(fractionated);
+	puts("Encrypted text:\n");
+	for (int i = 0; i < strlen(key); i++) {
+		for (int j = 0; j < row + 1; j++) {
+			if (j != 0) {
+				printf("%c", newTable[j][i]);
+			}
+		}
+	}
+	free(key);
+	for (int i = 0; i < row + 1; i++) {
+		free(newTable[i]);
+	}
+	free(newTable);
+}
+void sort(char** newTable, int row, int col) {
+	//using a bubble sort algorithm
+	int top, i;
+	for (top = col - 1; top > 0; top--) {
+		for (i = 0; i < top; i++) {
+			if (newTable[0][i] > newTable[0][i + 1]) {
+				for (int j = 0; j < row + 1; j++) {
+					char temp = newTable[j][i];
+					newTable[j][i] = newTable[j][i + 1];
+					newTable[j][i + 1] = temp;
+				}
+			}
+		}
+	}
+}
+void adfgxDecrypt() {
+	char* input = (char*)malloc(sizeof(char) * 4000);
+	puts("Enter text for decryption:\n");
+	getchar();
+	fgets(input, 3999, stdin);
+	char* key = (char*)malloc(sizeof(char) * 150);
+	fputs("\nEnter a transposition key (one word, no repeated alphabet and lowercase only): ", stdout);
+	fgets(key, 149, stdin);
+	//char**table = (char**)calloc(sizeof(char*), )
 }
