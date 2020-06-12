@@ -29,6 +29,7 @@ void adfgxEncrypt(); //function to encrypt in ADFGX cipher
 void mixedPolybius(char** table, char* grid);
 void sort(char** newTable, int row, int col); //function to use bubble sort the column using the first row
 void adfgxDecrypt(); //function to decrypt in ADFGX cipher
+void space(char* input); 
 void unsort(char** table, char* key, int row, int col);
 
 int main(void) {
@@ -999,6 +1000,7 @@ void adfgxEncrypt() {
 	char* fractionated = (char*)malloc(sizeof(char) * 4000);
 	puts("\nEnter text for encryption in ADFGX cipher:\n");
 	fgets(input, 1999, stdin);
+	strtok(input, "\n");
 	int counter = 0;
 	for (int i = 0; i < strlen(input); i++) {
 		char letter = input[i];
@@ -1012,6 +1014,7 @@ void adfgxEncrypt() {
 			}
 		}
 	}
+	//print here
 	for (int i = 0; i < 5; i++) {
 		free(table[i]);
 	}
@@ -1022,7 +1025,13 @@ void adfgxEncrypt() {
 	fputs("\nEnter a transposition key (one word, no repeated alphabet and lowercase only): ", stdout);
 	fgets(key, 149, stdin);
 	strtok(key, "\n");
-	int row = strlen(fractionated) / strlen(key);
+	int row;
+	if (strlen(fractionated) % strlen(key) != 0) {
+		row = (strlen(fractionated) / strlen(key)) + 1;
+	}
+	else {
+		row = strlen(fractionated) / strlen(key);
+	}
 	char** newTable = (char**)calloc(row + 1, sizeof(char*));
 	for (int i = 0; i < row + 1; i++) {
 		newTable[i] = (char*)calloc(strlen(key), sizeof(char));
@@ -1125,6 +1134,8 @@ void adfgxDecrypt() {
 	getchar();
 	fgets(input, 3999, stdin);
 	strtok(input, "\n");
+	space(input);
+	puts(input);
 	char* key = (char*)malloc(sizeof(char) * 150);
 	fputs("\nEnter a transposition key (one word, no repeated alphabet and lowercase only): ", stdout);
 	fgets(key, 149, stdin);
@@ -1170,6 +1181,7 @@ void adfgxDecrypt() {
 	}
 	//now, rearrange letters according to key
 	unsort(table, key, row, col);
+	//remove
 	for (int i = 0; i < row + 1; i++) {
 		for (int j = 0; j < col; j++) {
 			printf("%c", table[i][j]);
@@ -1202,6 +1214,13 @@ void adfgxDecrypt() {
 	fgets(grid, 150, stdin);
 	strtok(grid, "\n"); //this to remove the \n from using fgets
 	mixedPolybius(polybius, grid);
+	//remove
+	for (int i = 0; i < 6; i++) {
+		for (int j = 0; j < 6; j++) {
+			printf("%c", polybius[i][j]);
+		}
+		puts(" ");
+	}
 	free(grid);
 	char* output = (char*)malloc(sizeof(char) * 1500);
 	int outputCounter = 0;
@@ -1227,17 +1246,24 @@ void adfgxDecrypt() {
 	fputs(output, stdout);
 	free(output);
 }
+void space(char* input) {
+	int j = 0;
+	for (int i = 0; input[i] != '\0'; i++) {
+		if (input[i] != ' ') {
+			input[j++] = input[i];
+		}
+	}
+	input[j] = '\0';
+}
 void unsort(char** table, char* key, int row, int col) {
-	//using a bubble sort algorithm
-	for (int top = col - 1; top > 0; top--) {
-		for (int i = 0, k = 0; i < top; i++) {
-			if (table[0][i] == key[k]) {
-				for (int j = 0; j < row + 1; j++) {
-					char temp = table[j][i];
-					table[j][i] = table[j][k];
-					table[j][k] = temp;
+	for (int i = 0; i < col; i++) {
+		for (int j = 0; j < col; j++) {
+			if (key[i] == table[0][j]) {
+				for (int k = 0; k < row + 1; k++) {
+					char temp = table[k][i];
+					table[k][i] = table[k][j];
+					table[k][j] = temp;
 				}
-				k++;
 			}
 		}
 	}
