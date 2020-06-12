@@ -26,8 +26,10 @@ void playfairDecrypt(); //function to decrypt in Playfair's cipher
 void bifidEncrypt(); //function to encrypt in Bifid cipher
 void bifidDecrypt(); //function to decrypt in Bifid cipher
 void adfgxEncrypt(); //function to encrypt in ADFGX cipher
+void mixedPolybius(char** table, char* grid);
 void sort(char** newTable, int row, int col); //function to use bubble sort the column using the first row
 void adfgxDecrypt(); //function to decrypt in ADFGX cipher
+void unsort(char** table, char* key, int row, int col);
 
 int main(void) {
 	printMenu();
@@ -991,47 +993,7 @@ void adfgxEncrypt() {
 	getchar();
 	fgets(grid, 150, stdin);
 	strtok(grid, "\n"); //this to remove the \n from using fgets
-	for (int i = 0, k = 0; i < 6; i++) {
-		for (int j = 0; j < 6; j++) {
-			if (i == 0 && j == 0) {
-				table[i][j] = ' ';
-			}
-			else if (i == 0 && j == 1) {
-				table[i][j] = 'A';
-			}
-			else if (i == 0 && j == 2) {
-				table[i][j] = 'D';
-			}
-			else if (i == 0 && j == 3) {
-				table[i][j] = 'F';
-			}
-			else if (i == 0 && j == 4) {
-				table[i][j] = 'G';
-			}
-			else if (i == 0 && j == 5) {
-				table[i][j] = 'X';
-			}
-			else if (i == 1 && j == 0) {
-				table[i][j] = 'A';
-			}
-			else if (i == 2 && j == 0) {
-				table[i][j] = 'D';
-			}
-			else if (i == 3 && j == 0) {
-				table[i][j] = 'F';
-			}
-			else if (i == 4 && j == 0) {
-				table[i][j] = 'G';
-			}
-			else if (i == 5 && j == 0) {
-				table[i][j] = 'X';
-			}
-			else {
-				table[i][j] = grid[k];
-				k++;
-			}
-		}
-	}
+	mixedPolybius(table, grid);
 	free(grid);
 	char* input = (char*)malloc(sizeof(char) * 2000);
 	char* fractionated = (char*)malloc(sizeof(char) * 4000);
@@ -1088,7 +1050,7 @@ void adfgxEncrypt() {
 	puts("Encrypted text:\n");
 	for (int i = 0; i < strlen(key); i++) {
 		for (int j = 0; j < row + 1; j++) {
-			if (j != 0) {
+			if (j != 0 && newTable[i][j] != ' ') {
 				printf("%c", newTable[j][i]);
 			}
 		}
@@ -1114,13 +1076,169 @@ void sort(char** newTable, int row, int col) {
 		}
 	}
 }
+void mixedPolybius(char** table, char* grid) {
+	for (int i = 0, k = 0; i < 6; i++) {
+		for (int j = 0; j < 6; j++) {
+			if (i == 0 && j == 0) {
+				table[i][j] = ' ';
+			}
+			else if (i == 0 && j == 1) {
+				table[i][j] = 'A';
+			}
+			else if (i == 0 && j == 2) {
+				table[i][j] = 'D';
+			}
+			else if (i == 0 && j == 3) {
+				table[i][j] = 'F';
+			}
+			else if (i == 0 && j == 4) {
+				table[i][j] = 'G';
+			}
+			else if (i == 0 && j == 5) {
+				table[i][j] = 'X';
+			}
+			else if (i == 1 && j == 0) {
+				table[i][j] = 'A';
+			}
+			else if (i == 2 && j == 0) {
+				table[i][j] = 'D';
+			}
+			else if (i == 3 && j == 0) {
+				table[i][j] = 'F';
+			}
+			else if (i == 4 && j == 0) {
+				table[i][j] = 'G';
+			}
+			else if (i == 5 && j == 0) {
+				table[i][j] = 'X';
+			}
+			else {
+				table[i][j] = grid[k];
+				k++;
+			}
+		}
+	}
+}
 void adfgxDecrypt() {
 	char* input = (char*)malloc(sizeof(char) * 4000);
-	puts("Enter text for decryption:\n");
+	puts("\nEnter text for decryption:\n");
 	getchar();
 	fgets(input, 3999, stdin);
+	strtok(input, "\n");
 	char* key = (char*)malloc(sizeof(char) * 150);
 	fputs("\nEnter a transposition key (one word, no repeated alphabet and lowercase only): ", stdout);
 	fgets(key, 149, stdin);
-	//char**table = (char**)calloc(sizeof(char*), )
+	strtok(key, "\n");
+	int row;
+	if (strlen(input) % strlen(key) != 0) {
+		row = (strlen(input) / strlen(key)) + 1;
+	}
+	else {
+		row = strlen(input) / strlen(key);
+	}
+	int col = strlen(key);
+	char** table = (char**)calloc(sizeof(char*), row + 1);
+	for (int i = 0; i < row + 1; i++) {
+		table[i] = (char*)calloc(sizeof(char), col);
+	}
+	for (int i = 0, j = 0, k = 0; j < col; j++, k++) {
+		table[0][j] = key[k];
+	}
+	sort(table, row, col);
+	for (int i = 0, k = 0; i < col && input[k] != '\0'; i++) {
+		for (int j = 0; j < row + 1 && input[k] != '\0'; j++) {
+			if (j == 0) {
+				continue;
+			}
+			else if (input[k] == ' ') {
+				j--;
+				k++;
+				continue;
+			}
+			else {
+				table[j][i] = input[k];
+				k++;
+			}
+		}
+	}
+	//remove 
+	for (int i = 0; i < row + 1; i++) {
+		for (int j = 0; j < col; j++) {
+			printf("%c", table[i][j]);
+		}
+		puts(" ");
+	}
+	//now, rearrange letters according to key
+	unsort(table, key, row, col);
+	for (int i = 0; i < row + 1; i++) {
+		for (int j = 0; j < col; j++) {
+			printf("%c", table[i][j]);
+		}
+		puts(" ");
+	}
+	free(input);
+	free(key);
+	char* text = (char*)malloc(sizeof(char) * 3000);
+	int counter = 0;
+	for (int i = 0; i < row + 1; i++) {
+		for (int j = 0; j < col; j++) {
+			if (i != 0 && table[i][j] != NULL) {
+				text[counter] = table[i][j];
+				counter++;
+			}
+		}
+	}
+	text[counter] = '\0';
+	for (int i = 0; i < row + 1; i++) {
+		free(table[i]);
+	}
+	free(table);
+	char* grid = (char*)malloc(sizeof(char) * 100);
+	char** polybius = (char**)malloc(sizeof(char*) * 6);
+	for (int i = 0; i < 6; i++) {
+		polybius[i] = (char*)malloc(sizeof(char) * 6);
+	}
+	puts("\nEnter the polybius square (no spaces should be entered, no repeated alphabet and lowercase only):\n");
+	fgets(grid, 150, stdin);
+	strtok(grid, "\n"); //this to remove the \n from using fgets
+	mixedPolybius(polybius, grid);
+	free(grid);
+	char* output = (char*)malloc(sizeof(char) * 1500);
+	int outputCounter = 0;
+	for (int k = 0; k < strlen(text) - 1; k += 2) {
+		char row = text[k];
+		char col = text[k + 1];
+		for (int i = 0; i < 6; i++) {
+			for (int j = 0; j < 6; j++) {
+				if (row == polybius[i][0] && col == polybius[0][j]) {
+					output[outputCounter] = polybius[i][j];
+					outputCounter++;
+				}
+			}
+		}
+	}
+	free(text);
+	for (int i = 0; i < 6; i++) {
+		free(polybius[i]);
+	}
+	free(polybius);
+	output[outputCounter] = '\0';
+	puts("\nDecrypted text:\n");
+	fputs(output, stdout);
+	free(output);
+}
+void unsort(char** table, char* key, int row, int col) {
+	//using a bubble sort algorithm
+	for (int top = col - 1; top > 0; top--) {
+		for (int i = 0, k = 0; i < top; i++) {
+			if (table[0][i] == key[k]) {
+				for (int j = 0; j < row + 1; j++) {
+					char temp = table[j][i];
+					table[j][i] = table[j][k];
+					table[j][k] = temp;
+				}
+				k++;
+			}
+		}
+	}
 }
