@@ -98,7 +98,7 @@ void encryptMenu() {
 		adfgxEncrypt();
 	}
 	else if (input == 10) {
-		;
+		hillEncrypt();
 	}
 	else {
 		fputs("Wrong input!", stdout);
@@ -148,7 +148,7 @@ void decryptMenu() {
 		adfgxDecrypt();
 	}
 	else if (input == 10) {
-		;
+		hillDecrypt();
 	}
 	else {
 		fputs("Wrong input!", stdout);
@@ -1250,7 +1250,78 @@ void unsort(char** table, char* key, int row, int col) {
 	}
 }
 void hillEncrypt() {
-
+	//creating an array to store all the alphabets from 'A' to 'Z'
+	char* alphabetArray = (char*)malloc(sizeof(char) * 27);
+	char letter = 'A';
+	for (int i = 0; i < 26; i++) {
+		alphabetArray[i] = letter;
+		letter++;
+	}
+	alphabetArray[26] = '\0';
+	char* charInput = (char*)malloc(sizeof(char) * 2000);
+	puts("\nThe Hill cipher was invented by Leslie S. Hill in 1929. It was the first polygraphic cipher which allowed for");
+	puts("operation on 3 symbols at once. This cipher works on the principle of matrix multiplication. The input is");
+	puts("converted into a matric which is multiplied by the matrix obtained from the key.");
+	fputs("\nEnter text for encryption (only uppercase letters):\n\n", stdout);
+	getchar();
+	fgets(charInput, 1999, stdin);
+	strtok(charInput, "\n"); //remove \n from input array
+	for (int i = 0; charInput[i] != '\0'; i++) { //removing spaces from input
+		if (charInput[i] == ' ') {
+			charInput[i] = charInput[i + 1];
+			i++;
+		}
+	}
+	int* intInput = (int*)malloc(sizeof(int) * strlen(charInput));
+	for (int i = 0; i < strlen(charInput); i++) {
+		for (int j = 0; j < strlen(alphabetArray); j++) {
+			if (charInput[i] == alphabetArray[j]) {
+				intInput[i] = j;
+			}
+		}
+	}
+	char* charKey = (char*)malloc(sizeof(char) * 14);
+	fputs("\nEnter key for encryption (only 9 uppercase letters): ", stdout);
+	fgets(charKey, 13, stdin);
+	strtok(charKey, "\n"); //remove \n from input array
+	int** intKey = (int**)malloc(sizeof(int*) * 4);
+	for (int i = 0; i < 4; i++) {
+		intKey[i] = (int*)malloc(sizeof(int) * 4);
+	}
+	for (int i = 0, k = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			 char item = charKey[k];
+			for (int l = 0; l < strlen(alphabetArray); l++) {
+				if(item == alphabetArray[l]){
+					intKey[i][j] = l;
+					k++;
+					break;
+				}
+			}
+		}
+	}
+	free(charKey);
+	puts("\nEncrypted text:\n");
+	//key * 3 letters = answer % 26 --> search from table ---> print letter
+	int counter = 0, loop = 0;
+	while (counter < strlen(charInput)) {
+		for (int i = 0; i < 3; i++, loop++) {
+			int result = 0;
+			counter = loop / 3;
+			for (int j = 0; j < 3; j++) {
+				result += intKey[i][j] * intInput[counter];
+				counter++;
+			}
+			printf("%c", alphabetArray[result % 26]);
+		}
+	}
+	free(alphabetArray);
+	free(intInput);
+	for (int i = 0; i < 3; i++) {
+		free(intKey[i]);
+	}
+	free(intKey);
+	free(charInput);
 }
 void hillDecrypt() {
 
