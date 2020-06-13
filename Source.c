@@ -31,6 +31,8 @@ void sort(char** newTable, int row, int col); //function to use bubble sort the 
 void adfgxDecrypt(); //function to decrypt in ADFGX cipher
 void space(char* input); 
 void unsort(char** table, char* key, int row, int col);
+void hillEncrypt();
+void hillDecrypt();
 
 int main(void) {
 	printMenu();
@@ -64,7 +66,7 @@ void encryptMenu() {
 	puts("6. Bacon cipher (1605 C.E)");
 	puts("7. Playfair cipher  (1854 C.E)");
 	puts("8. Bifid cipher (circa 1900 C.E)");
-	puts("9. ADVGVX cipher (circa 1917 C.E)");
+	puts("9. ADFGX cipher (circa 1917 C.E)");
 	puts("10. Hill Cipher (1929 C.E)");
 	printf("\nEnter the number of cipher: ");
 	scanf("%d", &input);
@@ -114,7 +116,7 @@ void decryptMenu() {
 	puts("6. Bacon cipher (1605 C.E)");
 	puts("7. Playfair cipher  (1854 C.E)");
 	puts("8. Bifid cipher (circa 1900 C.E)");
-	puts("9. ADVGVX cipher (circa 1917 C.E)");
+	puts("9. ADFGX cipher (circa 1917 C.E)");
 	puts("10. Hill Cipher (1929 C.E)");
 	printf("\nEnter the number of cipher: ");
 	scanf("%d", &input);
@@ -1172,22 +1174,8 @@ void adfgxDecrypt() {
 			}
 		}
 	}
-	//remove 
-	for (int i = 0; i < row + 1; i++) {
-		for (int j = 0; j < col; j++) {
-			printf("%c", table[i][j]);
-		}
-		puts(" ");
-	}
 	//now, rearrange letters according to key
 	unsort(table, key, row, col);
-	//remove
-	for (int i = 0; i < row + 1; i++) {
-		for (int j = 0; j < col; j++) {
-			printf("%c", table[i][j]);
-		}
-		puts(" ");
-	}
 	free(input);
 	free(key);
 	char* text = (char*)malloc(sizeof(char) * 3000);
@@ -1214,13 +1202,6 @@ void adfgxDecrypt() {
 	fgets(grid, 150, stdin);
 	strtok(grid, "\n"); //this to remove the \n from using fgets
 	mixedPolybius(polybius, grid);
-	//remove
-	for (int i = 0; i < 6; i++) {
-		for (int j = 0; j < 6; j++) {
-			printf("%c", polybius[i][j]);
-		}
-		puts(" ");
-	}
 	free(grid);
 	char* output = (char*)malloc(sizeof(char) * 1500);
 	int outputCounter = 0;
@@ -1267,4 +1248,10 @@ void unsort(char** table, char* key, int row, int col) {
 			}
 		}
 	}
+}
+void hillEncrypt() {
+
+}
+void hillDecrypt() {
+
 }
