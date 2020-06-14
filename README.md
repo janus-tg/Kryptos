@@ -1,6 +1,6 @@
 # Cryptography
 
-This is a C program that takes text as input from the user and encrypts it in 10 of the most famous ciphers used throughout human history. 
+This is a C program that utilizes dynamic memory allocation and sorting for string manipulation to encrypt or decrypt user entered text in 10 of the most famous ciphers used throughout human history. 
 
 
 <img src="runtime.png" width="750">
