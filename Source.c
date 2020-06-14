@@ -29,7 +29,7 @@ void adfgxEncrypt(); //function to encrypt in ADFGX cipher
 void mixedPolybius(char** table, char* grid);
 void sort(char** newTable, int row, int col); //function to use bubble sort the column using the first row
 void adfgxDecrypt(); //function to decrypt in ADFGX cipher
-void space(char* input); //function to remove spaces 
+void space(char* input); //function to remove spaces
 void unsort(char** table, char* key, int row, int col); //function to bring the matrix in order according to the key
 void hillEncrypt(); //function to encrypt in Hill's Cipher
 void hillDecrypt(); //function to decrypt in Hill's Cipher
@@ -164,12 +164,15 @@ void caesarEncrypt() {
 	printf("\nEnter the shift value (1-25): ");
 	scanf("%d", &shift);
 	getchar(); //to remove the enter from scanf
-	puts("Enter text for encryption in Caesar shift (lowercase only):\n");
+	puts("Enter text for encryption in Caesar shift:\n");
 	fgets(input, 2000, stdin);
 	strtok(input, "\n"); //this to remove the \n from using fgets
-	for (int i = 0; i < strlen(input); i++) {
+	for (int i = 0; i < strlen(input); i++) {//loop to shift the alphabets according to user input
 		if (input[i] >= 'a' && input[i] <= 'z') {
 			input[i] = (input[i] + shift - 'a') % 26 + 'a';
+		}
+		else if (input[i] >= 'A' && input[i] <= 'Z') {//case if upper case alphabets entered
+			input[i] = (input[i] + shift - 'a') % 26 + 'A';
 		}
 	}
 	puts("\nEncrypted text:\n");
@@ -182,12 +185,15 @@ void caesarDecrypt() {
 	printf("\nEnter the shift value (1-25): ");
 	scanf("%d", &shift);
 	getchar(); //to remove the enter from scanf
-	puts("\nEnter text for decryption in Caesar shift (lowercase only):\n");
+	puts("\nEnter text for decryption in Caesar shift:\n");
 	fgets(input, 2000, stdin);
 	strtok(input, "\n"); //this to remove the \n from using fgets
 	for (int i = 0; i < strlen(input); i++) {
 		if (input[i] >= 'a' && input[i] <= 'z') {
 			input[i] = (input[i] + (26 - shift) - 'a') % 26 + 'a'; //using the fact that decryption will be 26 - shift
+		}
+		else if (input[i] >= 'A' && input[i] <= 'Z') {
+			input[i] = (input[i] + (26 - shift) - 'a') % 26 + 'a'; //case for uppercase letters
 		}
 	}
 	puts("\nDecrypted text:\n");
@@ -216,14 +222,14 @@ void scytaleEncrypt() {
 		fgets(input, 2000, stdin);
 		strtok(input, "\n"); //this to remove the \n from using fgets
 		int k = 0, row, col;
-		for (row = 0; row < strlen(input) && k < strlen(input); row++) {
+		for (row = 0; row < strlen(input) && k < strlen(input); row++) {//converting the input to a 2d matrix
 			for (col = 0; col < diameter && k < strlen(input); col++) {
 				output[row][col] = input[k];
 				k++;
 			}
 		}
 		puts("\nEncrypted text:\n");
-		for (int i = 0; i < diameter; i++) {
+		for (int i = 0; i < diameter; i++) {//reading the 2d matrix top to bottom then left to right
 			for (int j = 0; j <= row; j++) {
 				if (output[j][i] != 0) {
 					printf("%c", output[j][i]);
@@ -255,14 +261,14 @@ void scytaleDecrypt() {
 		fgets(input, 2000, stdin);
 		strtok(input, "\n"); //this to remove the \n from using fgets
 		int k = 0, row, col;
-		for (row = 0; row < strlen(input) && k < strlen(input); row++) {
+		for (row = 0; row < strlen(input) && k < strlen(input); row++) {//creating a 2d matrix to store the input
 			for (col = 0; col <= diameter && k < strlen(input); col++) {
 				output[row][col] = input[k];
 				k++;
 			}
 		}
 		puts("\nDecrypted text:\n");
-		for (int i = 0; i <= diameter; i++) {
+		for (int i = 0; i <= diameter; i++) {//reading the matrix top to bottom then left to right
 			for (int j = 0; j <= row; j++) {
 				if (output[j][i] != 0) {
 					printf("%c", output[j][i]);
@@ -287,7 +293,7 @@ void atbashEncrypt() {
 	for (int i = 0; i < strlen(input); i++) {
 		if (input[i] >= 'a' && input[i] <= 'z') {//if lower case letters are entered
 			input[i] = 'z' - input[i] + 'a';
-		}
+		}//alphabets replaced. a becomes z, b becomes y and so on
 		else if (input[i] >= 'A' && input[i] <= 'Z') {//if upper case letters are entered
 			input[i] = 'Z' - input[i] + 'A';
 		}
@@ -331,7 +337,7 @@ void affineEncrypt() {
 	for (int i = 0; i < strlen(input); i++) {
 		if (input[i] >= 'a' && input[i] <= 'z') {
 			input[i] = ((((a * input[i]) + b) - 'a') % 26) + 'a';
-		}
+		}//converting to ax + b form and extracting the alphabet and storing it in the array
 		else if (input[i] >= 'A' && input[i] <= 'Z') {
 			input[i] = ((((a * input[i]) + b) - 'A') % 26) + 'A';
 		}
@@ -354,7 +360,7 @@ void affineDecrypt() {
 	for (int i = 0; i < strlen(input); i++) {
 		if (input[i] >= 'a' && input[i] <= 'z') {
 			input[i] = ((((moduloMultiInverse(a)) * (input[i] - b)) - 'a') % 26) + 'a';
-		}
+		}//x is a^-1 * b so modulo multi inverse used
 		else if (input[i] >= 'A' && input[i] <= 'Z') {
 			input[i] = ((((moduloMultiInverse(a)) * (input[i] - b)) - 'A') % 26) + 'A';
 		}
@@ -457,7 +463,7 @@ void baconEncrypt() {
 	char** output = (char**)calloc(strlen(input), sizeof(char*));
 	for (int i = 0; i < strlen(input); i++) {
 		output[i] = (char*)calloc(7, sizeof(char));
-	}
+	}//simple combimation of a and b denotes each alphabet. match and store in the array
 	for (int i = 0; i < strlen(input); i++) {
 		if (input[i] == 'A') {
 			strncpy(output[i], "aaaaa ", 7);
@@ -701,11 +707,11 @@ void playfairEncrypt() {
 	int inputCounter, row, col, r1, c1, r2, c2;
 	char l1, l2;
 	for (inputCounter = 0; inputCounter < strlen(input) - 1; inputCounter += 2) {
-		l1 = input[inputCounter];
+		l1 = input[inputCounter]; //l1 and l2 denote the bigrams
 		l2 = input[inputCounter + 1];
 		for (row = 0; row < 5; row++) {
 			for (col = 0; col < 5; col++) {
-				if (table[row][col] == l1) {
+				if (table[row][col] == l1) {//storing the row and column where the bigram was matched with the table
 					r1 = row;
 					c1 = col;
 				}if (table[row][col] == l2) {
@@ -719,7 +725,7 @@ void playfairEncrypt() {
 				input[inputCounter] = table[r1 + 1][c1];
 				input[inputCounter + 1] = table[r2 + 1][c1];
 			}
-			else {
+			else {//boundary case when we are at the edge of table
 				if (r1 == 4 && r2 != 4) {
 					input[inputCounter] = table[0][c1];
 					input[inputCounter + 1] = table[r2 + 1][c1];
@@ -734,7 +740,7 @@ void playfairEncrypt() {
 				input[inputCounter] = table[r1][c1 + 1];
 				input[inputCounter + 1] = table[r2][c2 + 1];
 			}
-			else {
+			else {//boundary case when we are at the edge of table
 				if (c1 == 4 && c2 != 4) {
 					input[inputCounter] = table[r1][0];
 					input[inputCounter + 1] = table[r2][c2 + 1];
@@ -762,7 +768,7 @@ void polybius(char* key, char** table) {
 	char letter = 'a';
 	char keyLetter;
 	int i;
-	for (i = 0; i < 25; i++) {
+	for (i = 0; i < 25; i++) {// only 25 alphabet table. so, j is excluded
 		if (letter != 'j') {
 			alphabet[i] = letter;
 			letter++;
@@ -796,7 +802,7 @@ void polybius(char* key, char** table) {
 	free(alphabet);
 }
 void searchDelete(char* alphabet, char keyLetter) {
-	int i, j;
+	int i, j; // function to search and delete after matching
 	for (i = 0, j = 0; i < strlen(alphabet); i++) {
 		if (alphabet[i] != keyLetter) {
 			alphabet[j++] = alphabet[i];
@@ -907,21 +913,21 @@ void bifidEncrypt() {
 		for (row = 0; row < 5; row++) {
 			for (col = 0; col < 5; col++) {
 				if (letter == table[row][col]) {
-					coordinate[i] = row;
-					column[i] = col;
+					coordinate[i] = row;// coordinate array is storing all the rows first
+					column[i] = col;// column array is storing all the columns first
 					i++;
 				}
 			}
 		}
 	}
 	for (j = 0, k = i; j <= i; j++, k++) {
-		coordinate[k] = column[j];
+		coordinate[k] = column[j];//merging all the column numbers to come after all the row numbers
 	}
 	free(column);
 	for (int a = 0, b = 0; b < j - 1; a += 2, b++) {
 		r1 = coordinate[a];
 		c1 = coordinate[a + 1];
-		input[b] = table[r1][c1];
+		input[b] = table[r1][c1];//reading from merged coordinate array
 	}
 	free(coordinate);
 	for (int i = 0; i < 5; i++) {
@@ -996,7 +1002,7 @@ void adfgxEncrypt() {
 	getchar();
 	fgets(grid, 150, stdin);
 	strtok(grid, "\n"); //this to remove the \n from using fgets
-	mixedPolybius(table, grid);
+	mixedPolybius(table, grid); //function creates grid with adfgx using given input of grid
 	free(grid);
 	char* input = (char*)malloc(sizeof(char) * 2000);
 	char* fractionated = (char*)malloc(sizeof(char) * 4000);
@@ -1004,7 +1010,8 @@ void adfgxEncrypt() {
 	fgets(input, 1999, stdin);
 	strtok(input, "\n");
 	int counter = 0;
-	for (int i = 0; i < strlen(input); i++) {
+	for (int i = 0; i < strlen(input); i++) {//loop to match each input alphabet with the table and write the fractionated
+		//text in terms of adfgx in the fractionated array
 		char letter = input[i];
 		for (int j = 0; j < 6; j++) {
 			for (int k = 0; k < 6; k++) {
@@ -1016,8 +1023,8 @@ void adfgxEncrypt() {
 			}
 		}
 	}
-	//print here
-	for (int i = 0; i < 5; i++) {
+
+	for (int i = 0; i < 6; i++) {
 		free(table[i]);
 	}
 	free(table);
@@ -1028,7 +1035,7 @@ void adfgxEncrypt() {
 	fgets(key, 149, stdin);
 	strtok(key, "\n");
 	int row;
-	if (strlen(fractionated) % strlen(key) != 0) {
+	if (strlen(fractionated) % strlen(key) != 0) {//cases to calculate number of rows of table
 		row = (strlen(fractionated) / strlen(key)) + 1;
 	}
 	else {
@@ -1041,22 +1048,22 @@ void adfgxEncrypt() {
 	puts("");
 	for (int i = 0, k = 0, l = 0; i < row + 1 && fractionated[k] != '\0'; i++) {
 		for (int j = 0; j < strlen(key) && fractionated[k] != '\0'; j++) {
-			if (i == 0) {
+			if (i == 0) {//filling the first row with the key
 				newTable[i][j] = key[l];
 				l++;
 			}
-			else if (fractionated[k] == ' ') {
+			else if (fractionated[k] == ' ') {//if space is present then skip it
 				j--;
 				k++;
 				continue;
 			}
-			else {
+			else {//filling the table with the text from fractionated(in terms of adfgx)
 				newTable[i][j] = fractionated[k];
 				k++;
 			}
 		}
 	}
-	sort(newTable, row, strlen(key));
+	sort(newTable, row, strlen(key));//function to sort the columns alphabetically according to first row of the table ie the key
 	free(fractionated);
 	puts("Encrypted text:\n");
 	for (int i = 0; i < strlen(key); i++) {
@@ -1087,7 +1094,7 @@ void sort(char** newTable, int row, int col) {
 		}
 	}
 }
-void mixedPolybius(char** table, char* grid) {
+void mixedPolybius(char** table, char* grid) {//function to create adfgx table
 	for (int i = 0, k = 0; i < 6; i++) {
 		for (int j = 0; j < 6; j++) {
 			if (i == 0 && j == 0) {
@@ -1227,7 +1234,7 @@ void adfgxDecrypt() {
 	fputs(output, stdout);
 	free(output);
 }
-void space(char* input) {
+void space(char* input) {//function to remove spaces from input string
 	int j = 0;
 	for (int i = 0; input[i] != '\0'; i++) {
 		if (input[i] != ' ') {
@@ -1236,7 +1243,7 @@ void space(char* input) {
 	}
 	input[j] = '\0';
 }
-void unsort(char** table, char* key, int row, int col) {
+void unsort(char** table, char* key, int row, int col) {//function to sort the alphabetical columns according to the key
 	for (int i = 0; i < col; i++) {
 		for (int j = 0; j < col; j++) {
 			if (key[i] == table[0][j]) {
