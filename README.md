@@ -9,7 +9,7 @@ This is a C program that takes text as input from the user and encrypts it in 10
 ## Running the program
 
 1. Install any IDE with a suitable C compiler.
-2. Create a project and paste the ```Source.c```code.
+2. Create a new project and paste the ```Source.c``` code in a ```.c``` file.
 3. Remove the first line: ```#define _CRT_SECURE_NO_WARNINGS``` from the code
 4. Run the program.
 
@@ -20,4 +20,5 @@ This is a C program that takes text as input from the user and encrypts it in 10
 Pull requests are welcome for adding more ciphers or fixing exisiting issues. 
 
 ## License
+
 [MIT](https://github.com/ghosetuhin/Cryptography/blob/master/LICENSE)
