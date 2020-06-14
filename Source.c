@@ -29,10 +29,10 @@ void adfgxEncrypt(); //function to encrypt in ADFGX cipher
 void mixedPolybius(char** table, char* grid);
 void sort(char** newTable, int row, int col); //function to use bubble sort the column using the first row
 void adfgxDecrypt(); //function to decrypt in ADFGX cipher
-void space(char* input); 
-void unsort(char** table, char* key, int row, int col);
-void hillEncrypt();
-void hillDecrypt();
+void space(char* input); //function to remove spaces 
+void unsort(char** table, char* key, int row, int col); //function to bring the matrix in order according to the key
+void hillEncrypt(); //function to encrypt in Hill's Cipher
+void hillDecrypt(); //function to decrypt in Hill's Cipher
 
 int main(void) {
 	printMenu();
@@ -1260,7 +1260,7 @@ void hillEncrypt() {
 	alphabetArray[26] = '\0';
 	char* charInput = (char*)malloc(sizeof(char) * 2000);
 	puts("\nThe Hill cipher was invented by Leslie S. Hill in 1929. It was the first polygraphic cipher which allowed for");
-	puts("operation on 3 symbols at once. This cipher works on the principle of matrix multiplication. The input is");
+	puts("operation on max 3 symbols at once. This cipher works on the principle of matrix multiplication. The input is");
 	puts("converted into a matric which is multiplied by the matrix obtained from the key.");
 	fputs("\nEnter text for encryption (only uppercase letters):\n\n", stdout);
 	getchar();
@@ -1280,27 +1280,19 @@ void hillEncrypt() {
 			}
 		}
 	}
-	char* charKey = (char*)malloc(sizeof(char) * 14);
-	fputs("\nEnter key for encryption (only 9 uppercase letters): ", stdout);
-	fgets(charKey, 13, stdin);
-	strtok(charKey, "\n"); //remove \n from input array
 	int** intKey = (int**)malloc(sizeof(int*) * 4);
 	for (int i = 0; i < 4; i++) {
 		intKey[i] = (int*)malloc(sizeof(int) * 4);
 	}
-	for (int i = 0, k = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
-			 char item = charKey[k];
-			for (int l = 0; l < strlen(alphabetArray); l++) {
-				if(item == alphabetArray[l]){
-					intKey[i][j] = l;
-					k++;
-					break;
-				}
-			}
-		}
-	}
-	free(charKey);
+	intKey[0][0] = 6;
+	intKey[0][1] = 24;
+	intKey[0][2] = 1;
+	intKey[1][0] = 13;
+	intKey[1][1] = 16;
+	intKey[1][2] = 10;
+	intKey[2][0] = 20;
+	intKey[2][1] = 17;
+	intKey[2][2] = 15;
 	puts("\nEncrypted text:\n");
 	//key * 3 letters = answer % 26 --> search from table ---> print letter
 	int counter = 0, loop = 0;
@@ -1317,12 +1309,66 @@ void hillEncrypt() {
 	}
 	free(alphabetArray);
 	free(intInput);
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 4; i++) {
 		free(intKey[i]);
 	}
 	free(intKey);
 	free(charInput);
 }
 void hillDecrypt() {
-
+	//creating an array to store all the alphabets from 'A' to 'Z'
+	char* alphabetArray = (char*)malloc(sizeof(char) * 27);
+	char letter = 'A';
+	for (int i = 0; i < 26; i++) {
+		alphabetArray[i] = letter;
+		letter++;
+	}
+	alphabetArray[26] = '\0';
+	char* charInput = (char*)malloc(sizeof(char) * 2000);
+	fputs("\nEnter text for decryption (only uppercase letters):\n\n", stdout);
+	getchar();
+	fgets(charInput, 1999, stdin);
+	strtok(charInput, "\n"); //remove \n from input array
+	int* intInput = (int*)malloc(sizeof(int) * strlen(charInput));
+	for (int i = 0; i < strlen(charInput); i++) {
+		for (int j = 0; j < strlen(alphabetArray); j++) {
+			if (charInput[i] == alphabetArray[j]) {
+				intInput[i] = j;
+			}
+		}
+	}
+	int** intKey = (int**)malloc(sizeof(int*) * 4);
+	for (int i = 0; i < 4; i++) {
+		intKey[i] = (int*)malloc(sizeof(int) * 4);
+	}
+	intKey[0][0] = 8;
+	intKey[0][1] = 5;
+	intKey[0][2] = 10;
+	intKey[1][0] = 21;
+	intKey[1][1] = 8;
+	intKey[1][2] = 21;
+	intKey[2][0] = 21;
+	intKey[2][1] = 12;
+	intKey[2][2] = 8;
+	puts("\nDecrypted text:\n");
+	//key * 3 letters = answer % 26 --> search from table ---> print letter
+	int counter = 0, loop = 0;
+	while (counter < strlen(charInput)) {
+		for (int i = 0; i < 3; i++, loop++) {
+			int result = 0;
+			counter = loop / 3;
+			for (int j = 0; j < 3; j++) {
+				result += intKey[i][j] * intInput[counter];
+				counter++;
+			}
+			printf("%c", alphabetArray[result % 26]);
+		}
+	}
+	free(alphabetArray);
+	free(intInput);
+	for (int i = 0; i < 4; i++) {
+		free(intKey[i]);
+	}
+	free(intKey);
+	free(charInput);
 }
