@@ -1272,6 +1272,7 @@ void hillEncrypt() {
 			i++;
 		}
 	}
+	puts("Matrix with key GYBNQKURP taken.");
 	int* intInput = (int*)malloc(sizeof(int) * strlen(charInput));
 	for (int i = 0; i < strlen(charInput); i++) {
 		for (int j = 0; j < strlen(alphabetArray); j++) {
@@ -1341,6 +1342,7 @@ void hillDecrypt() {
 	for (int i = 0; i < 4; i++) {
 		intKey[i] = (int*)malloc(sizeof(int) * 4);
 	}
+	puts("Matrix with key GYBNQKURP taken.");
 	intKey[0][0] = 8;
 	intKey[0][1] = 5;
 	intKey[0][2] = 10;
