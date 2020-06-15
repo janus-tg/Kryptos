@@ -15,6 +15,21 @@ This is a C program that utilizes dynamic memory allocation and sorting for stri
 
 **Note:** Only users running this program on Visual Studio on the MSVC compiler *must* ignore step 3 above.
 
+## List of ciphers available
+
+Click to read more about these ciphers!
+
+1. [Atbash](https://en.wikipedia.org/wiki/Atbash)
+2. [Scytale](https://en.wikipedia.org/wiki/Scytale#:~:text=In%20cryptography%2C%20a%20scytale%20(%2F,which%20is%20written%20a%20message.)
+3. [Caesar shift](https://en.wikipedia.org/wiki/Caesar_cipher)
+4. [Affine](https://en.wikipedia.org/wiki/Affine_cipher)
+5. [Vigenere](https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher)
+6. [Bacon](https://en.wikipedia.org/wiki/Bacon%27s_cipher)
+7. [Playfair](https://en.wikipedia.org/wiki/Playfair_cipher)
+8. [Bifid](https://en.wikipedia.org/wiki/Bifid_cipher)
+9. [ADFGX](https://en.wikipedia.org/wiki/ADFGVX_cipher)
+10. [Hill](https://en.wikipedia.org/wiki/Hill_cipher#:~:text=In%20classical%20cryptography%2C%20the%20Hill,than%20three%20symbols%20at%20once.)
+
 ## Contributing
 
 Pull requests are welcome for adding more ciphers or fixing exisiting issues. 
