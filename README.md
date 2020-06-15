@@ -20,7 +20,7 @@ This is a C program that utilizes dynamic memory allocation and sorting for stri
 Click to read more about these ciphers!
 
 1. [Atbash](https://en.wikipedia.org/wiki/Atbash)
-2. [Scytale](https://en.wikipedia.org/wiki/Scytale#:~:text=In%20cryptography%2C%20a%20scytale%20(%2F,which%20is%20written%20a%20message.)
+2. [Scytale](https://en.wikipedia.org/wiki/Scytale)
 3. [Caesar shift](https://en.wikipedia.org/wiki/Caesar_cipher)
 4. [Affine](https://en.wikipedia.org/wiki/Affine_cipher)
 5. [Vigenere](https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher)
