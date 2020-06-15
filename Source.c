@@ -58,11 +58,11 @@ void printMenu() {
 void encryptMenu() {
 	int input = 0;
 	puts("\nList of ciphers available:");
-	puts("\n1. Atbash cipher (circa 500 B.C.E");
-	puts("2. Scytale cipher (circa 440 B.C.E");
+	puts("\n1. Atbash cipher (circa 500 B.C.E)");
+	puts("2. Scytale cipher (circa 440 B.C.E)");
 	puts("3. Caesar shift  (circa 60 B.C.E)");
 	puts("4. Affine cipher");
-	puts("5. Vigenere cipher (circa 1500 C.E");
+	puts("5. Vigenere cipher (circa 1500 C.E)");
 	puts("6. Bacon cipher (1605 C.E)");
 	puts("7. Playfair cipher  (1854 C.E)");
 	puts("8. Bifid cipher (circa 1900 C.E)");
@@ -109,10 +109,10 @@ void decryptMenu() {
 	int input = 0;
 	puts("\nList of ciphers available:");
 	puts("\n1. Atbash cipher (circa 500 B.C.E)");
-	puts("2. Scytale cipher (circa 440 B.C.E(");
+	puts("2. Scytale cipher (circa 440 B.C.E)");
 	puts("3. Caesar shift  (circa 60 B.C.E)");
 	puts("4. Affine cipher");
-	puts("5. Vigenere cipher (circa 1500 C.E");
+	puts("5. Vigenere cipher (circa 1500 C.E)");
 	puts("6. Bacon cipher (1605 C.E)");
 	puts("7. Playfair cipher  (1854 C.E)");
 	puts("8. Bifid cipher (circa 1900 C.E)");
