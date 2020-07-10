@@ -1,6 +1,6 @@
 # Kryptos
 
-This is a C program that utilizes dynamic memory allocation and sorting for string manipulation to encrypt or decrypt user entered text in 10 of the most famous ciphers used throughout human history. 
+This project was named after the famous sculpture containing unencrypted texts located outside the CIA HQ at Langley. This is a C program that utilizes dynamic memory allocation and sorting for string manipulation to encrypt or decrypt user entered text in 10 of the most famous ciphers used throughout human history. 
 
 
 <img src="image.png" width="750">
@@ -9,7 +9,7 @@ This is a C program that utilizes dynamic memory allocation and sorting for stri
 ## Running the program
 
 1. Install any IDE with a suitable C compiler.
-2. Create a new project and paste the ```Source.c``` code in a ```.c``` file.
+2. Create a new project, copy the ```Source.c``` code and paste it in a ```.c``` file.
 3. Remove the first line: ```#define _CRT_SECURE_NO_WARNINGS``` from the code
 4. Run the program.
 
