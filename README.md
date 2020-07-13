@@ -15,6 +15,15 @@ This project was named after the famous sculpture containing unencrypted texts l
 
 **Note:** Only users running this program on Visual Studio on the MSVC compiler *must* ignore step 3 above.
 
+**OR**
+
+For OS X and Linux
+
+1. Download the ```Source.c``` file and remove the first line: ```#define _CRT_SECURE_NO_WARNINGS``` from the code.
+2. Then, open the folder containing the ```Source.c``` file in the terminal.
+3. Type ```clang Source.c -o Source``` and press enter in the terminal. (If compiler is gcc, then replace clang with gcc)
+4. Finally, type ```./Source``` and press enter to run the executable. 
+
 ## List of ciphers available
 
 Click to read more about these ciphers!
