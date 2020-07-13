@@ -17,7 +17,7 @@ This project was named after the famous sculpture containing unencrypted texts l
 
 **OR**
 
-For OS X and Linux
+For OS X and Linux:
 
 1. Download the ```Source.c``` file and remove the first line: ```#define _CRT_SECURE_NO_WARNINGS``` from the code.
 2. Then, open the folder containing the ```Source.c``` file in the terminal.
