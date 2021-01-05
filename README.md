@@ -45,4 +45,4 @@ Pull requests are welcome for adding more ciphers or fixing exisiting issues.
 
 ## License
 
-[MIT](https://github.com/ghosetuhin/Cryptography/blob/master/LICENSE)
+[MIT](https://github.com/janus-tg/Cryptography/blob/master/LICENSE)
